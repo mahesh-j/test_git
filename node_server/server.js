@@ -3,12 +3,18 @@ const fs = require('fs');
 const hostname = 'localhost';
 const port = '3000';
 
-const index = fs.readFileSync('../index.html');
-
 const server = http.createServer((req,res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type','text/html');
-    res.end(index);
+    fs.readFile("." + req.url,(err,data) => {
+        if(data) {
+            res.writeHead(200,{'Content-Type': 'text/html'});
+            res.write(data);
+            res.end();
+        } else {
+            res.writeHead(403, { 'Content-Type': 'text/plain' });
+            res.end();
+        }
+    });
+ 
 });
 
 server.listen(port,hostname,() => {
